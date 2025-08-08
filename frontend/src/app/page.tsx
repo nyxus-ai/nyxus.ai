@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// FIX: Removed the unused 'Mail' import to resolve the compilation warning.
 import { Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight } from 'lucide-react';
-// FIX: The `next/image` component is not supported in this environment.
-// Using a standard `<img>` tag to resolve the build error.
-// The `next/image` warning can be ignored as it's a trade-off for a successful compile.
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,19 +52,16 @@ export default function App() {
 
   const testimonials = [
     {
-      // FIX: Escaped unescaped quotes with &quot; to pass linting rules.
       quote: "Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.",
       author: 'Jane Doe',
       company: 'Tech Solutions Inc.'
     },
     {
-      // FIX: Escaped unescaped quotes with &apos; to pass linting rules.
       quote: "The workflow automation solution has drastically improved our efficiency. We&apos;ve seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.",
       author: 'John Smith',
       company: 'Global Logistics Co.'
     },
     {
-      // FIX: Escaped unescaped quotes with &quot; and &apos; to pass linting rules.
       quote: "Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They&apos;re not just a vendor; they&apos;re a true partner.",
       author: 'Emily Chen',
       company: 'Innovate Health'
@@ -77,19 +70,16 @@ export default function App() {
 
   const faqs = [
     {
-      // FIX: Escaped unescaped quotes with &apos; to pass linting rules.
       question: 'What kind of businesses do you work with?',
-      answer: "We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you're looking for a simple chatbot or a complex automation system."
+      answer: "We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you&apos;re looking for a simple chatbot or a complex automation system."
     },
     {
-      // FIX: Escaped unescaped quotes with &apos; to pass linting rules.
       question: 'How long does a typical project take?',
-      answer: "Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We'll provide a detailed timeline during the consultation phase."
+      answer: "Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We&apos;ll provide a detailed timeline during the consultation phase."
     },
     {
-      // FIX: Escaped unescaped quotes with &apos; to pass linting rules.
       question: 'Do I need to have a technical background?',
-      answer: "Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we'll guide you through every step of the process in a non-technical way."
+      answer: "Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we&apos;ll guide you through every step of the process in a non-technical way."
     },
   ];
 
@@ -283,7 +273,7 @@ export default function App() {
                   }`}
                 >
                   <p className="text-lg md:text-xl italic text-gray-300 leading-relaxed mb-6">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </p>
                   <div className="font-semibold text-white">
                     {testimonial.author}
@@ -354,7 +344,7 @@ export default function App() {
           {/* Contact Section */}
           <section id="contact" className="container mx-auto px-6 py-20">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white">Let's Build Something Great</h2>
+              <h2 className="text-4xl font-bold text-white">Let&apos;s Build Something Great</h2>
               <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
                 Ready to integrate AI into your business? Get in touch for a free consultation.
               </p>
