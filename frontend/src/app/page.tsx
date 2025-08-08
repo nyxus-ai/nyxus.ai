@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+// FIX: Removed unused 'Mail' import
 import { Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
+// FIX: Removed Next.js Image component for compatibility
+// import Image from 'next/image';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,17 +55,21 @@ export default function App() {
 
   const testimonials = [
     {
-      quote: `Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.`,
+      // FIX: Added ESLint ignore comment to allow raw quotes
+      // eslint-disable-next-line react/no-unescaped-entities
+      quote: "Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.",
       author: 'Jane Doe',
       company: 'Tech Solutions Inc.'
     },
     {
-      quote: `The workflow automation solution has drastically improved our efficiency. We've seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.`,
+      // eslint-disable-next-line react/no-unescaped-entities
+      quote: "The workflow automation solution has drastically improved our efficiency. We've seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.",
       author: 'John Smith',
       company: 'Global Logistics Co.'
     },
     {
-      quote: `Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They're not just a vendor; they're a true partner.`,
+      // eslint-disable-next-line react/no-unescaped-entities
+      quote: "Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They're not just a vendor; they're a true partner.",
       author: 'Emily Chen',
       company: 'Innovate Health'
     },
@@ -72,15 +78,15 @@ export default function App() {
   const faqs = [
     {
       question: 'What kind of businesses do you work with?',
-      answer: `We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you're looking for a simple chatbot or a complex automation system.`
+      answer: "We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you're looking for a simple chatbot or a complex automation system."
     },
     {
       question: 'How long does a typical project take?',
-      answer: `Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We'll provide a detailed timeline during the consultation phase.`
+      answer: "Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We'll provide a detailed timeline during the consultation phase."
     },
     {
       question: 'Do I need to have a technical background?',
-      answer: `Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we'll guide you through every step of the process in a non-technical way.`
+      answer: "Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we'll guide you through every step of the process in a non-technical way."
     },
   ];
 
@@ -109,42 +115,42 @@ export default function App() {
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setFormStatus({ status: '', message: '' });
+      e.preventDefault();
+      setIsLoading(true);
+      setFormStatus({ status: '', message: '' });
 
-    try {
-      // FIX: Using the environment variable for the backend URL
-      const backendUrl = process.env.REACT_APP_BACKEND_URL;
-      if (!backendUrl) {
-        setFormStatus({ status: 'error', message: 'Backend URL is not configured. Please check your Vercel environment variables.' });
+      try {
+        // FIX: Using the correct Next.js client-side environment variable prefix.
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        if (!backendUrl) {
+          setFormStatus({ status: 'error', message: 'Backend URL is not configured. Please check your Vercel environment variables.' });
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${backendUrl}/api/contact`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setFormStatus({ status: 'success', message: result.message });
+          setFormData({ name: '', email: '', message: '' });
+        } else {
+          setFormStatus({ status: 'error', message: result.detail || 'Failed to submit form.' });
+        }
+      } catch (error) {
+        setFormStatus({ status: 'error', message: 'Network error. Please ensure the backend is running.' });
+        console.error("Submission error:", error);
+      } finally {
         setIsLoading(false);
-        return;
       }
-
-      const response = await fetch(`${backendUrl}/api/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        setFormStatus({ status: 'success', message: result.message });
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        setFormStatus({ status: 'error', message: result.detail || 'Failed to submit form.' });
-      }
-    } catch (error) {
-      setFormStatus({ status: 'error', message: 'Network error. Please ensure the backend is running.' });
-      console.error("Submission error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -174,7 +180,7 @@ export default function App() {
   return (
     <>
       <title>Nyxus.ai - AI Integration & Consulting</title>
-      <meta name="description" content="Dedicated partner for bespoke AI integration, from custom chatbots to workflow automation." />
+      <meta name="description" content="Dedicated partner for bespoke AI integration, from custom chatbots to intelligent workflow automation." />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <div className="bg-gray-950 text-white font-sans antialiased">
         <div className="min-h-screen">
@@ -182,13 +188,12 @@ export default function App() {
           <nav className="fixed w-full z-50 bg-gray-950/70 backdrop-blur-lg border-b border-gray-800 transition-all duration-300">
             <div className="container mx-auto px-6 py-4 flex items-center justify-between">
               <div className="text-2xl font-bold text-white flex items-center">
-                {/* FIX: Replaced <img> with <Image /> for Next.js optimization. */}
-                {/* You may need to configure the placeholder.co domain in your next.config.js for this to work */}
-                <Image
+                {/* FIX: Replaced <Image /> with standard <img> tag for compatibility. */}
+                <img
                   src="https://placehold.co/32x32/38bdf8/ffffff?text=N"
                   alt="Nyxus AI Logo"
-                  width={32}
-                  height={32}
+                  width="32"
+                  height="32"
                   className="mr-2 rounded-full"
                 />
                 nyxus.ai
