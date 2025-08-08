@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Mail, Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight } from 'lucide-react';
+import { Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,34 +53,34 @@ export default function App() {
 
   const testimonials = [
     {
-      quote: "Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.",
-      author: "Jane Doe",
-      company: "Tech Solutions Inc."
+      quote: `Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.`,
+      author: 'Jane Doe',
+      company: 'Tech Solutions Inc.'
     },
     {
-      quote: "The workflow automation solution has drastically improved our efficiency. We've seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.",
-      author: "John Smith",
-      company: "Global Logistics Co."
+      quote: `The workflow automation solution has drastically improved our efficiency. We've seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.`,
+      author: 'John Smith',
+      company: 'Global Logistics Co.'
     },
     {
-      quote: "Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They're not just a vendor; they're a true partner.",
-      author: "Emily Chen",
-      company: "Innovate Health"
+      quote: `Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They're not just a vendor; they're a true partner.`,
+      author: 'Emily Chen',
+      company: 'Innovate Health'
     },
   ];
 
   const faqs = [
     {
-      question: "What kind of businesses do you work with?",
-      answer: "We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you're looking for a simple chatbot or a complex automation system."
+      question: 'What kind of businesses do you work with?',
+      answer: `We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you're looking for a simple chatbot or a complex automation system.`
     },
     {
-      question: "How long does a typical project take?",
-      answer: "Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We'll provide a detailed timeline during the consultation phase."
+      question: 'How long does a typical project take?',
+      answer: `Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive workflow automation could take a few months. We'll provide a detailed timeline during the consultation phase.`
     },
     {
-      question: "Do I need to have a technical background?",
-      answer: "Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we'll guide you through every step of the process in a non-technical way."
+      question: 'Do I need to have a technical background?',
+      answer: `Not at all! We handle all the technical aspects. Our goal is to translate your business needs into an effective AI solution, and we'll guide you through every step of the process in a non-technical way.`
     },
   ];
 
@@ -113,8 +114,15 @@ export default function App() {
     setFormStatus({ status: '', message: '' });
 
     try {
-      // The API endpoint for your FastAPI backend
-      const response = await fetch("http://localhost:8000/api/contact", {
+      // FIX: Using the environment variable for the backend URL
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      if (!backendUrl) {
+        setFormStatus({ status: 'error', message: 'Backend URL is not configured. Please check your Vercel environment variables.' });
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,7 +182,15 @@ export default function App() {
           <nav className="fixed w-full z-50 bg-gray-950/70 backdrop-blur-lg border-b border-gray-800 transition-all duration-300">
             <div className="container mx-auto px-6 py-4 flex items-center justify-between">
               <div className="text-2xl font-bold text-white flex items-center">
-                <img src="https://placehold.co/32x32/38bdf8/ffffff?text=N" alt="Nyxus AI Logo" className="mr-2 rounded-full" />
+                {/* FIX: Replaced <img> with <Image /> for Next.js optimization. */}
+                {/* You may need to configure the placeholder.co domain in your next.config.js for this to work */}
+                <Image
+                  src="https://placehold.co/32x32/38bdf8/ffffff?text=N"
+                  alt="Nyxus AI Logo"
+                  width={32}
+                  height={32}
+                  className="mr-2 rounded-full"
+                />
                 nyxus.ai
               </div>
               <div className="hidden md:flex space-x-8 text-sm font-medium">
