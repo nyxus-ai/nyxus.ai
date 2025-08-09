@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight } from 'lucide-react';
+import { Briefcase, Bot, Workflow, FileText, Video, ShoppingCart, Lightbulb, Menu, X, ChevronRight, FileSearch, ChartBar, Globe } from 'lucide-react';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,7 +9,6 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState({ status: '', message: '' });
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const services = [
     {
@@ -50,21 +49,25 @@ export default function App() {
     },
   ];
 
-  const testimonials = [
+  // Replaced testimonials with case studies as requested
+  const caseStudies = [
     {
-      quote: "Working with Nyxus.ai was a game-changer for our customer support. The custom chatbot they built handles 80% of our inquiries, freeing up our team to focus on more complex issues.",
-      author: 'Jane Doe',
-      company: 'Tech Solutions Inc.'
+      id: 'case-study-1',
+      icon: <FileSearch className="w-10 h-10 text-indigo-400" />,
+      title: 'Enhanced Customer Service for Retail',
+      description: 'Developed a custom chatbot for a large e-commerce client that handled over 80% of routine customer inquiries, drastically reducing support staff workload and improving response times.'
     },
     {
-      quote: "The workflow automation solution has drastically improved our efficiency. We&apos;ve seen a 30% reduction in time spent on manual reporting, all thanks to Nyxus.ai.",
-      author: 'John Smith',
-      company: 'Global Logistics Co.'
+      id: 'case-study-2',
+      icon: <ChartBar className="w-10 h-10 text-indigo-400" />,
+      title: 'Automated Financial Reporting',
+      description: 'Implemented a workflow automation system for a financial services firm that automatically summarized and generated weekly reports from raw data, saving over 30 hours of manual work per month.'
     },
     {
-      quote: "Their AI consulting helped us identify key opportunities for AI integration we never knew existed. They&apos;re not just a vendor; they&apos;re a true partner.",
-      author: 'Emily Chen',
-      company: 'Innovate Health'
+      id: 'case-study-3',
+      icon: <Globe className="w-10 h-10 text-indigo-400" />,
+      title: 'Streamlined Content Creation',
+      description: 'Built a content generation tool for a marketing agency that used a powerful language model to generate product descriptions and social media posts, increasing their content output by 200%.'
     },
   ];
 
@@ -146,7 +149,7 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'services', 'testimonials', 'about', 'faqs', 'contact'];
+      const sections = ['hero', 'services', 'case-studies', 'about', 'faqs', 'contact'];
       let currentSection = '';
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -160,14 +163,6 @@ export default function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const goToNextTestimonial = () => {
-    setActiveTestimonial((current) => (current + 1) % testimonials.length);
-  };
-
-  const goToPrevTestimonial = () => {
-    setActiveTestimonial((current) => (current - 1 + testimonials.length) % testimonials.length);
-  };
 
   return (
     <>
@@ -191,7 +186,7 @@ export default function App() {
               </div>
               <div className="hidden md:flex space-x-8 text-sm font-medium">
                 <NavLink id="services" text="Services" />
-                <NavLink id="testimonials" text="Testimonials" />
+                <NavLink id="case-studies" text="Case Studies" />
                 <NavLink id="about" text="About" />
                 <NavLink id="faqs" text="FAQs" />
                 <NavLink id="contact" text="Contact" />
@@ -205,7 +200,7 @@ export default function App() {
             {isMenuOpen && (
               <div className="md:hidden flex flex-col items-center space-y-4 py-4 border-t border-gray-800">
                 <NavLink id="services" text="Services" />
-                <NavLink id="testimonials" text="Testimonials" />
+                <NavLink id="case-studies" text="Case Studies" />
                 <NavLink id="about" text="About" />
                 <NavLink id="faqs" text="FAQs" />
                 <NavLink id="contact" text="Contact" />
@@ -256,47 +251,29 @@ export default function App() {
             </div>
           </section>
 
-          {/* Testimonials Section */}
-          <section id="testimonials" className="container mx-auto px-6 py-20 bg-gray-900 rounded-xl">
+          {/* Case Studies Section */}
+          <section id="case-studies" className="container mx-auto px-6 py-20 bg-gray-900 rounded-xl">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white">What Our Clients Say</h2>
+              <h2 className="text-4xl font-bold text-white">Our Case Studies</h2>
               <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
-                Building trust through proven results and client satisfaction.
+                Discover how we can transform your business with innovative AI solutions.
               </p>
             </div>
-            <div className="relative max-w-4xl mx-auto">
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className={`bg-gray-950 p-10 rounded-xl shadow-lg border border-gray-800 transition-opacity duration-500 ease-in-out ${
-                    index === activeTestimonial ? 'opacity-100 block' : 'opacity-0 hidden absolute top-0 left-0 w-full'
-                  }`}
-                >
-                  <p className="text-lg md:text-xl italic text-gray-300 leading-relaxed mb-6">
-                    &quot;{testimonial.quote}&quot;
-                  </p>
-                  <div className="font-semibold text-white">
-                    {testimonial.author}
-                    <span className="block text-sm text-indigo-400 font-normal">
-                      {testimonial.company}
-                    </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {caseStudies.map((study) => (
+                <div key={study.id} className="bg-gray-950 p-10 rounded-xl shadow-lg border border-gray-800 transition-all duration-300 hover:bg-gray-800 hover:border-indigo-600 transform hover:-translate-y-2 group">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="p-3 rounded-full bg-indigo-900 group-hover:bg-indigo-700 transition-colors duration-300">
+                      {study.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-white">{study.title}</h3>
                   </div>
+                  <p className="text-gray-400 leading-relaxed">{study.description}</p>
                 </div>
               ))}
-              <button
-                onClick={goToPrevTestimonial}
-                className="absolute top-1/2 -left-12 transform -translate-y-1/2 p-2 rounded-full bg-gray-800 text-white hover:bg-indigo-600 transition-colors duration-300"
-              >
-                <ChevronRight size={24} className="transform rotate-180" />
-              </button>
-              <button
-                onClick={goToNextTestimonial}
-                className="absolute top-1/2 -right-12 transform -translate-y-1/2 p-2 rounded-full bg-gray-800 text-white hover:bg-indigo-600 transition-colors duration-300"
-              >
-                <ChevronRight size={24} />
-              </button>
             </div>
           </section>
+
 
           {/* About Section */}
           <section id="about" className="container mx-auto px-6 py-20">
