@@ -1,6 +1,7 @@
 // src/app/blog/page.js
 import { createClient } from 'contentful';
 import Link from 'next/link';
+import Image from 'next/image'; // Import next/image
 
 async function getBlogPosts() {
   const client = createClient({
@@ -10,7 +11,7 @@ async function getBlogPosts() {
 
   const res = await client.getEntries({
     content_type: 'blogPost',
-    order: '-fields.date', 
+    order: '-fields.date',
   });
 
   return res.items.map((item) => ({
@@ -19,9 +20,10 @@ async function getBlogPosts() {
     summary: item.fields.summary || '',
     date: item.fields.date || '',
     slug: item.fields.slug,
+    // Handle image URL for blog list
     imageUrl: item.fields.featuredImage?.fields.file.url
       ? `https:${item.fields.featuredImage.fields.file.url}`
-      : '/default.png', 
+      : '/default.png', // Ensure /public/default.png exists
   }));
 }
 
@@ -38,11 +40,16 @@ export default async function BlogPage() {
         {posts.length > 0 ? (
           posts.map((post) => (
             <div key={post.id} className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800 transition-all duration-300 hover:bg-gray-800 hover:border-indigo-600 transform hover:-translate-y-2 group">
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
+              {/* Fix: Use next/image for blog list item image */}
+              <div className="relative w-full h-48 rounded-md overflow-hidden mb-4">
+                <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizing hint
+                    className="object-cover"
+                />
+              </div>
               <div className="flex items-center text-sm text-gray-500 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 mr-2">
                   <path d="M12 2c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />

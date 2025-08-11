@@ -2,6 +2,7 @@
 import { createClient } from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import Link from 'next/link';
+import Image from 'next/image'; // Import next/image
 
 export default async function BlogPostPage({ params }) {
     const { slug } = await params; // Correct for Next.js 15
@@ -15,9 +16,8 @@ export default async function BlogPostPage({ params }) {
         const res = await client.getEntries({
             content_type: 'blogPost',
             'fields.slug': slug,
-            include: 10 
+            include: 10
         });
-
 
         if (res.items.length === 0) {
             return (
@@ -44,9 +44,10 @@ export default async function BlogPostPage({ params }) {
             }
         }
 
-        const imageUrl = post.fields.featuredImage?.fields?.file?.url
+        // Handle featured image for the main post image
+        const postImageUrl = post.fields.featuredImage?.fields?.file?.url
             ? `https:${post.fields.featuredImage.fields.file.url}`
-            : '/default.png';
+            : '/default.png'; // Ensure /public/default.png exists
 
         const contentHtml = content
             ? documentToHtmlString(content)
@@ -58,11 +59,16 @@ export default async function BlogPostPage({ params }) {
                     ← Back to Blog
                 </Link>
 
-                <img
-                    src={imageUrl}
-                    alt={title}
-                    className="w-full h-60 object-cover rounded-lg mb-6"
-                />
+                {/* Fix: Use next/image for the main post image */}
+                <div className="relative w-full h-60 rounded-lg overflow-hidden mb-6">
+                    <Image
+                        src={postImageUrl}
+                        alt={title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizing hint
+                        className="object-cover"
+                    />
+                </div>
 
                 <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
 
@@ -71,16 +77,20 @@ export default async function BlogPostPage({ params }) {
                     {date ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date'}
                 </p>
 
-               
+                {/* Display Author Details */}
                 {authorDetails ? (
                     <div className="flex items-center mb-6">
-                      
+                        {/* Fix: Use next/image for the author profile picture */}
                         {authorDetails.profilePicture?.fields?.file?.url && (
-                            <img
-                                src={`https:${authorDetails.profilePicture.fields.file.url}`}
-                                alt={authorDetails.fullName || "Author"}
-                                className="w-10 h-10 rounded-full mr-3 object-cover"
-                            />
+                            <div className="relative w-10 h-10 rounded-full mr-3 overflow-hidden">
+                                <Image
+                                    src={`https:${authorDetails.profilePicture.fields.file.url}`}
+                                    alt={authorDetails.fullName || "Author"}
+                                    fill
+                                    sizes="40px" // Fixed size hint
+                                    className="object-cover"
+                                />
+                            </div>
                         )}
                         {/* Render Author Name and Job Title */}
                         <span className="text-gray-400 text-sm">

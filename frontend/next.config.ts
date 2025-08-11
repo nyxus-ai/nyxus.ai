@@ -1,5 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.ts
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -8,8 +11,16 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        // Allow images from Contentful
+        protocol: 'https',
+        hostname: 'images.ctfassets.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
+ 
 };
 
-module.exports = nextConfig;
+export default nextConfig;

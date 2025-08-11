@@ -1,3 +1,4 @@
+// src/app/components/Contact.js
 'use client';
 import React, { useState } from 'react';
 
@@ -17,7 +18,7 @@ export default function Contact() {
     setFormStatus({ status: '', message: '' });
 
     try {
-     
+      // Simulate API call
       setTimeout(() => {
         setFormStatus({ status: 'success', message: 'Form submitted successfully! (Placeholder)' });
         setFormData({ name: '', email: '', message: '' });
@@ -34,7 +35,8 @@ export default function Contact() {
   return (
     <section id="contact" className="container mx-auto px-6 py-20">
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white">Let's Build Something Great</h2>
+        {/* Fix: Escape the apostrophe */}
+        <h2 className="text-4xl font-bold text-white">Let&#39;s Build Something Great</h2>
         <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
           Ready to integrate AI into your business? Get in touch for a free consultation.
         </p>

@@ -1,9 +1,11 @@
+// src/app/components/Blog.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from 'contentful';
 import { Newspaper, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image'; // Import next/image
 
 export default function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -33,9 +35,10 @@ export default function Blog() {
             summary: item.fields.summary || '',
             date: item.fields.date || '',
             slug: slug || '',
-            imageUrl: item.fields.featuredImage?.fields?.file?.url
+            // Handle image URL for blog list in component
+            imageUrl: item.fields.featuredImage?.fields.file.url
               ? `https:${item.fields.featuredImage.fields.file.url}`
-              : '/default.png'
+              : '/default.png' // Ensure /public/default.png exists
           };
         });
 
@@ -67,18 +70,23 @@ export default function Blog() {
               key={post.id}
               className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800 transition-all duration-300 hover:bg-gray-800 hover:border-indigo-600 transform hover:-translate-y-2 group"
             >
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
+              {/* Fix: Use next/image for blog list item image in component */}
+              <div className="relative w-full h-48 rounded-md overflow-hidden mb-4">
+                 <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizing hint
+                    className="object-cover"
+                />
+              </div>
               <div className="flex items-center text-sm text-gray-500 mb-2">
                 <Newspaper className="w-4 h-4 mr-2" />
                 <span>{post.date}</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{post.title}</h3>
               <p className="text-gray-400 leading-relaxed mb-4">{post.summary}</p>
-              
+
               {post.slug ? (
                 <Link
                   href={`/blog/${post.slug}`}
