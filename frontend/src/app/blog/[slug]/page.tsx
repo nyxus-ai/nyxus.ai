@@ -1,4 +1,4 @@
-import { createClient } from 'contentful';
+import { createClient, Entry } from 'contentful';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -15,8 +15,27 @@ interface AuthorDetails {
   };
 }
 
+// Blog post fields expected from Contentful
+interface BlogPostFields {
+  title: string;
+  slug: string;
+  content?: any; // Contentful rich text can be typed more strictly, but `any` here is fine because it's passed into documentToHtmlString
+  date?: string;
+  featuredImage?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
+  author?: {
+    sys: { id: string };
+    fields?: AuthorDetails;
+  };
+}
+
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
+  const { slug } = params;
 
   const client = createClient({
     space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string,
@@ -24,10 +43,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   });
 
   try {
-    const res: any = await client.getEntries({
+    // 👇 Strongly typed response
+    const res = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
       'fields.slug': slug,
-      include: 10
+      include: 10,
     });
 
     if (res.items.length === 0) {
@@ -39,17 +59,21 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       );
     }
 
-    const post = res.items[0];
+    const post: Entry<BlogPostFields> = res.items[0];
     const { title, content, date } = post.fields;
 
     let authorDetails: AuthorDetails | null = null;
-    if (post.fields.author && post.fields.author.fields) {
+
+    if (post.fields.author?.fields) {
       authorDetails = post.fields.author.fields;
     } else if (post.fields.author?.sys?.id && res.includes?.Entry) {
       const authorId = post.fields.author.sys.id;
+
+      // 👇 Strictly typed, no `any`
       const foundAuthorEntry = res.includes.Entry.find(
-        (entry: any) => entry.sys.id === authorId
+        (entry: Entry<AuthorDetails>) => entry.sys.id === authorId
       );
+
       if (foundAuthorEntry) {
         authorDetails = foundAuthorEntry.fields;
       }
@@ -82,7 +106,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
 
         <p className="text-gray-400 mb-2">
-          {date ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date'}
+          {date
+            ? new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : 'No date'}
         </p>
 
         {authorDetails ? (
@@ -91,7 +121,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               <div className="relative w-10 h-10 rounded-full mr-3 overflow-hidden">
                 <Image
                   src={`https:${authorDetails.profilePicture.fields.file.url}`}
-                  alt={authorDetails.fullName || "Author"}
+                  alt={authorDetails.fullName || 'Author'}
                   fill
                   sizes="40px"
                   className="object-cover"
@@ -99,7 +129,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             )}
             <span className="text-gray-400 text-sm">
-              By <span className="font-medium">{authorDetails.fullName || "Unknown Name"}</span>
+              By <span className="font-medium">{authorDetails.fullName || 'Unknown Name'}</span>
               {authorDetails.jobTitle && ` • ${authorDetails.jobTitle}`}
             </span>
           </div>

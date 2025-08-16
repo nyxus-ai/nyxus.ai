@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { createClient } from 'contentful';
+import { createClient, Entry } from 'contentful';
 import { Newspaper, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,6 +13,21 @@ interface BlogPost {
   date: string;
   slug: string;
   imageUrl: string;
+}
+
+// Define expected Contentful blog fields
+interface BlogPostFields {
+  title: string;
+  summary?: string;
+  date?: string;
+  slug?: string;
+  featuredImage?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
 }
 
 export default function Blog() {
@@ -27,12 +42,12 @@ export default function Blog() {
           accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string,
         });
 
-        const response = await client.getEntries({
+        const response = await client.getEntries<BlogPostFields>({
           content_type: 'blogPost',
           order: ['-fields.date'], // ✅ newest first
         });
 
-        const fetchedPosts: BlogPost[] = response.items.map((item: any) => {
+        const fetchedPosts: BlogPost[] = response.items.map((item: Entry<BlogPostFields>) => {
           const slug = item.fields.slug || '';
           const imageUrl = item.fields.featuredImage?.fields.file.url
             ? `https:${item.fields.featuredImage.fields.file.url}`
