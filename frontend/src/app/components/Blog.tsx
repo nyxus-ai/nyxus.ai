@@ -1,51 +1,59 @@
-// src/app/components/Blog.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from 'contentful';
 import { Newspaper, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image'; // Import next/image
+import Image from 'next/image';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  summary: string;
+  date: string;
+  slug: string;
+  imageUrl: string;
+}
 
 export default function Blog() {
-  const [blogPosts, setBlogPosts] = useState([]);
-  const [blogError, setBlogError] = useState(null);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogError, setBlogError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
         const client = createClient({
-          space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-          accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+          space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string,
+          accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string,
         });
 
         const response = await client.getEntries({
           content_type: 'blogPost',
-          order: '-fields.date', // newest first
+          order: ['-fields.date'], // ✅ newest first
         });
 
-        const fetchedPosts = response.items.map(item => {
-          const slug = item.fields.slug;
-          if (!slug) {
-            console.warn(`Post "${item.fields.title}" is missing a slug`);
-          }
+        const fetchedPosts: BlogPost[] = response.items.map((item: any) => {
+          const slug = item.fields.slug || '';
+          const imageUrl = item.fields.featuredImage?.fields.file.url
+            ? `https:${item.fields.featuredImage.fields.file.url}`
+            : '/default.png'; // fallback
+
           return {
             id: item.sys.id,
-            title: item.fields.title,
+            title: item.fields.title || 'Untitled Post',
             summary: item.fields.summary || '',
             date: item.fields.date || '',
-            slug: slug || '',
-            // Handle image URL for blog list in component
-            imageUrl: item.fields.featuredImage?.fields.file.url
-              ? `https:${item.fields.featuredImage.fields.file.url}`
-              : '/default.png' // Ensure /public/default.png exists
+            slug,
+            imageUrl,
           };
         });
 
         setBlogPosts(fetchedPosts);
       } catch (error) {
         console.error('Error fetching blog posts from Contentful:', error);
-        setBlogError('Failed to load blog posts. Check your network connection and Contentful API keys.');
+        setBlogError(
+          'Failed to load blog posts. Check your network connection and Contentful API keys.'
+        );
         setBlogPosts([]);
       }
     };
@@ -61,6 +69,7 @@ export default function Blog() {
           Stay updated with our latest insights on AI, technology, and business innovation.
         </p>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogError ? (
           <p className="col-span-full text-center text-red-400">{blogError}</p>
@@ -70,14 +79,14 @@ export default function Blog() {
               key={post.id}
               className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800 transition-all duration-300 hover:bg-gray-800 hover:border-indigo-600 transform hover:-translate-y-2 group"
             >
-              {/* Fix: Use next/image for blog list item image in component */}
               <div className="relative w-full h-48 rounded-md overflow-hidden mb-4">
-                 <Image
-                    src={post.imageUrl}
-                    alt={post.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizing hint
-                    className="object-cover"
+                <Image
+                  src={post.imageUrl}
+                  alt={post.title}
+                  fill
+                  unoptimized // ✅ disables Next.js proxying
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
                 />
               </div>
               <div className="flex items-center text-sm text-gray-500 mb-2">
@@ -86,7 +95,6 @@ export default function Blog() {
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{post.title}</h3>
               <p className="text-gray-400 leading-relaxed mb-4">{post.summary}</p>
-
               {post.slug ? (
                 <Link
                   href={`/blog/${post.slug}`}

@@ -1,0 +1,125 @@
+{
+  "hero": {
+    "title": "AI Integration & Consulting for Modern Businesses",
+    "subtitle": "From custom chatbots to intelligent automation, we bring cutting-edge AI to your workflows.",
+    "ctaPrimary": "Book a Consultation",
+    "ctaSecondary": "Learn More"
+  },
+  "services": [
+    {
+      "title": "Custom AI Chatbots",
+      "description": "Build intelligent chatbots for customer support, HR, e-commerce, and internal knowledge bases using a modern tech stack like LangChain and OpenAI."
+    },
+    {
+      "title": "Workflow Automation",
+      "description": "Automate repetitive tasks like email replies, document summarization, and report generation by connecting powerful language models to your tools."
+    },
+    {
+      "title": "AI-Driven Document Search",
+      "description": "Enable your team to upload and ask questions about PDFs, Word files, and other documents using powerful RAG-based systems."
+    },
+    {
+      "title": "AI for Audio/Video",
+      "description": "Leverage AI for tasks like transcription, meeting summarization, podcast summarization, and video highlight generation using tools like Whisper."
+    },
+    {
+      "title": "AI for E-Commerce",
+      "description": "Boost your business with AI-powered product description generators, review summarizers, dynamic FAQ bots, and personalized recommendation systems."
+    },
+    {
+      "title": "AI Consulting",
+      "description": "We help businesses understand where AI can fit into their systems and build Proof-of-Concepts (PoCs) to prove value."
+    }
+  ],
+  "pricing": [
+    {
+      "plan": "Starter",
+      "price": "$499",
+      "features": [
+        "1 Custom AI Chatbot",
+        "Basic Workflow Automation",
+        "Email Support"
+      ]
+    },
+    {
+      "plan": "Professional",
+      "price": "$1499",
+      "features": [
+        "Up to 3 AI Solutions",
+        "Advanced Workflow Automation",
+        "Integration with CRM",
+        "Priority Email Support"
+      ]
+    },
+    {
+      "plan": "Enterprise",
+      "price": "Custom",
+      "features": [
+        "Unlimited AI Solutions",
+        "Full Workflow Automation",
+        "Dedicated AI Consultant",
+        "24/7 Support"
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "What kind of businesses do you work with?",
+      "answer": "We work with businesses of all sizes, from startups to large enterprises. Our solutions are tailored to your specific needs, whether you’re looking for a simple chatbot or a complex automation system."
+    },
+    {
+      "question": "How long does a typical project take?",
+      "answer": "Project timelines vary depending on the scope and complexity. A simple chatbot might take a few weeks, while a comprehensive automation could take a few months. We provide a detailed timeline during the consultation phase."
+    },
+    {
+      "question": "Do I need to have a technical background?",
+      "answer": "Not at all! We handle all technical aspects and guide you through every step of the process in a non-technical way."
+    },
+    {
+      "question": "Can you integrate AI solutions with our existing tools?",
+      "answer": "Yes, our AI solutions can be seamlessly integrated with your existing workflows, CRMs, and internal tools."
+    },
+    {
+      "question": "What is the cost of your AI services?",
+      "answer": "Our pricing depends on the project’s scope and complexity. We offer flexible packages to suit different budgets and needs."
+    },
+    {
+      "question": "Do you offer ongoing support after the project?",
+      "answer": "Yes, we provide post-deployment support and maintenance to ensure your AI systems continue to run smoothly."
+    },
+    {
+      "question": "Can you handle sensitive business data securely?",
+      "answer": "Absolutely. We follow strict security practices to ensure your business data remains private and protected."
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Sarah Thompson",
+      "company": "TechEdge Solutions",
+      "feedback": "Nyxus.ai transformed our customer support with an AI chatbot that handles 80% of incoming queries. Game-changer!"
+    },
+    {
+      "name": "James Carter",
+      "company": "GreenWave Energy",
+      "feedback": "Their workflow automation saved us hundreds of hours every month. Highly recommended!"
+    }
+  ],
+  "contact": {
+    "email": "contact@nyxus.ai",
+    "phone": "+1 (555) 123-4567",
+    "address": "123 AI Street, Innovation City, CA 94016",
+    "socials": {
+      "linkedin": "https://linkedin.com/company/nyxus-ai",
+      "twitter": "https://twitter.com/nyxusai",
+      "github": "https://github.com/nyxusai"
+    }
+  },
+  "blogFallback": [
+    {
+      "title": "The Future of AI in Business",
+      "excerpt": "AI is reshaping industries — here’s how companies can adapt.",
+      "date": "2024-07-15",
+      "imageUrl": "/placeholder.jpg"
+    }
+  ]
+}
